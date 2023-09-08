@@ -8,20 +8,27 @@ declare let dealership: any
 const Sell: React.FunctionComponent = () => {
   const [showModalSell, setShowModalSell] = React.useState(false);
 
-  const [sellerPubKey, setSellerPubKey] = React.useState("ENABLE ALBY");
+  const [sellerPubKey, setSellerPubKey] = React.useState("");
+  const [step, setStep] = React.useState<"sell"| "setFee" | "pending" | "complete">("sell")
 
-
-  const getSellerPubKey = async () =>{
+  const sell = async () =>{
     try {
       const privKey = dealership.getPrivateKey()
       const pubKey = dealership.getPublicKey(privKey)
       await dealership.prepBuyer(pubKey)
-      console.log("buyerContract", dealership.buyers_contract)
-      dealership.db.push(dealership.buyers_contract)
+      setStep("setFee")
     } catch (err: any) {
       alert(err.message);
     }
   }
+
+  React.useEffect(()=> {
+    if (showModalSell === false){
+      setStep("sell")
+    }
+  }, [showModalSell])
+
+
 
   return (
     <div>
@@ -54,7 +61,6 @@ const Sell: React.FunctionComponent = () => {
                   type="button"
                   onClick={() => {
                     setShowModalSell(true)
-                    getSellerPubKey()
                   }}
                 >Yes Sell</button>
               </div>
@@ -64,9 +70,7 @@ const Sell: React.FunctionComponent = () => {
       </section>
       {showModalSell ? (
         <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -87,11 +91,72 @@ const Sell: React.FunctionComponent = () => {
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
                   <form>
+
                     <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Seller Pubkey
-                      </label>
-                      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" value={sellerPubKey} />
+                    {step === "sell" && (
+                       <fieldset>
+                       <legend>How much do you want to sell?</legend>
+
+                       <div>
+                         <input type="radio" id="huey" name="drone" value="huey" checked />
+                         <label>&nbsp;1,000 sats</label>
+                       </div>
+
+                       <div>
+                         <input type="radio" id="dewey" name="drone" value="dewey" />
+                         <label>&nbsp;2,000 sats</label>
+                       </div>
+
+                       <div>
+                         <input type="radio" id="louie" name="drone" value="louie" />
+                         <label>&nbsp;3,000 sats</label>
+                       </div>
+                       <button
+                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={sell}>
+                      Sell
+                    </button>
+                     </fieldset>
+                    )}
+
+                    {step === "setFee" && (
+                       <fieldset>
+                       <legend>What fee do you want to charge?</legend>
+
+                       <div>
+                         <input type="radio" id="huey" name="drone" value="huey" checked />
+                         <label>&nbsp;500 sats</label>
+                       </div>
+
+                       <div>
+                         <input type="radio" id="dewey" name="drone" value="dewey" />
+                         <label>&nbsp;1,000 sats</label>
+                       </div>
+
+                       <div>
+                         <input type="radio" id="louie" name="drone" value="louie" />
+                         <label>&nbsp;5,000 sats</label>
+                       </div>
+                       <button
+                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                      onClick={()=>setStep("pending")}>
+                      Next
+                    </button>
+                     </fieldset>
+                    )}
+
+                    {step === "pending" && (
+                        <h3>Hold tight we need to wait for a buyer, waiting for an address to receive money...</h3>
+                    )}
+
+                    {step === "complete" && (
+                        <h3>Congrats! Your UTXO has been sold</h3>
+                    )}
+
+
+                      {/* <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" value={sellerPubKey} /> */}
                     </div>
                   </form>
                 </div>
@@ -107,9 +172,8 @@ const Sell: React.FunctionComponent = () => {
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModalSell(false)}
-                  >
-                    Sign Transaction
+                    onClick={() => setShowModalSell(false)}>
+                    Ok
                   </button>
                 </div>
               </div>

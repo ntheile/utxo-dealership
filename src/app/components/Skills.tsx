@@ -43,7 +43,7 @@ const Skills: React.FunctionComponent = () => {
             <h6 className="text-uppercase font-weight-bold my-3">Zero Credit Check</h6>
             <div className="skills-underline" />
             <p className="w-75 mx-auto text-muted">
-              Help decentralize mining! All buyers pre-approved.
+              Help decentralize mining! All buyers pre-approved. (Miner subsidy problem)
             </p>
           </div>
           <div className="col-sm-6 col-md-3 text-center my-3">
@@ -53,7 +53,7 @@ const Skills: React.FunctionComponent = () => {
             <h6 className="text-uppercase font-weight-bold my-3">Factory Prices</h6>
             <div className="skills-underline" />
             <p className="w-75 mx-auto text-muted">
-              Inventory stright from the factory and passing the savings on to you!!!
+              Inventory straight from the factory and passing the savings on to you!!!
             </p>
           </div>
         </div>

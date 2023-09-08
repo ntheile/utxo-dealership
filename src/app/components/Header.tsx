@@ -27,7 +27,7 @@ const Header: React.FunctionComponent = () => {
             <h5 className="title-heading d-inline-block p-2 text-uppercase">
               the all new{" "}
             </h5>
-            <h2 className="title-heading text-uppercase my-2 title" style={{marginLeft:0}}>2023 Deluxe UTXO</h2>
+            <h2 className="title-heading text-uppercase my-2 title" style={{marginLeft:0}}>2023 Luxury UTXO</h2>
             <h3 className="title-heading text-uppercase">From Block height 806650</h3>
             <h6 className="title-heading text-capitalise">starts from</h6>
             <h2 className="title-heading d-inline-block">
