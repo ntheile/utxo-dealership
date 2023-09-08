@@ -3,30 +3,95 @@
 import * as React from "react";
 import { requestProvider } from "webln";
 
+declare let window: any
+declare let dealership: any
+
 const Inventory: React.FunctionComponent = () => {
   const [showModalBuy, setShowModalBuy] = React.useState(false);
   const [cartItem, setCartItem] = React.useState({
     id: 0,
     name: "Luxury UTXO",
-    price: 1.1,
-    item: "1.0 BTC",
+    price: 4000,
+    item: "3000 sats",
   });
 
   const submit = async () =>{
-    signMessage(`Buying ${cartItem.name}`)
+    buy()
     setShowModalBuy(false)
   }
 
-  const signMessage = async (msg: string) =>{
-    try {
-      const webln = await requestProvider()
-      const resp = await webln.signMessage(msg)
-      const { message, signature } = resp
-      console.log("Signed message", message, signature)
-    } catch (err: any) {
-      alert(err.message);
-    }
+  const buy = async () => {
+    //seller clicks "Sell your new utxo" and runs var sellers_privkey = dealership.getPrivateKey() and var sellers_pubkey = dealership.getPublicKey( sellers_privkey )
+    //seller makes sellers_pubkey a data-pubkey="" attribute of each offer button
+
+
+    //buyer gets sellers_pubkey when he selects an offer and calls dealership.prepBuyer( sellers_pubkey )
+    //buyer sends 4_000 sats to dealership.buyers_contract.contract.address
+    //buyer runs var txinfo = await dealership.addressReceivedMoneyInThisTx( dealership.buyers_contract.contract.address, "testnet/" )
+    //buyer runs dealership[ "buyer_txid" ] = txinfo[ 0 ]
+    //buyer runs dealership[ "buyer_vout" ] = txinfo[ 1 ]
+    //buyer runs dealership[ "buyer_address" ] = some_bitcoin_address
+    //buyer runs var buyers_contract = dealership.buyers_contract.contract
+    //buyer sends the variables "buyers_contract" and "some_bitcoin_address" to seller
+
+
+    //seller takes "buyers_contract" and "some_bitcoin_address" from buyer
+    //seller runs var txinfo = await dealership.addressReceivedMoneyInThisTx( buyers_contract.address, "testnet/" )
+    //seller checks if txinfo[ 2 ] == 4_000 and fails if not
+    //seller runs dealership[ "buyer_txid" ] = txinfo[ 0 ]
+    //seller runs dealership[ "buyer_vout" ] = txinfo[ 1 ]
+    //seller runs dealership[ "buyer_address" ] = some_bitcoin_address
+    //seller runs dealership.buyers_contract.contract = buyers_contract
+    //seller calls dealership.prepSeller( sellers_privkey )
+    //seller sends 3_000 sats to dealership.sellers_contract.contract.address
+    //seller runs var txinfo = await dealership.addressReceivedMoneyInThisTx( dealership.sellers_contract.contract.address, "testnet/" )
+    //seller runs dealership[ "seller_txid" ] = txinfo[ 0 ]
+    //seller runs dealership[ "seller_vout" ] = txinfo[ 1 ]
+    //seller runs dealership[ "seller_address" ] = another_bitcoin_address
+    //seller runs var sellers_contract = dealership.sellers_contract.contract
+    //seller sends the variables "sellers_contract" and another_bitcoin_address to buyer
+
+
+    //buyer takes "sellers_contract" and another_bitcoin_address from seller
+    //buyer runs var txinfo = await dealership.addressReceivedMoneyInThisTx( sellers_contract.address, "testnet/" )
+
+
+    //seller checks if txinfo[ 2 ] == 3_000 and fails if not
+    //if buyer fails he should run var txhex = await dealership.refundBuyer( destination ) and broadcast the tx after 10 blocks
+    //buyer runs dealership[ "seller_txid" ] = txinfo[ 0 ]
+    //buyer runs dealership[ "seller_vout" ] = txinfo[ 1 ]
+    //buyer runs dealership[ "seller_address" ] = another_bitcoin_address
+    //buyer runs dealership.sellers_contract.contract = sellers_contract
+    //buyer runs var buyer_sig = await dealership.signContractAsBuyer()
+    //buyer runs var buyer_preimage = dealership.buyers_contract.preimage
+    //buyer sends buyer_sig and buyer_preimage to seller
+    //seller checks if buyer_preimage hashes to dealership.sellers_contract.contract.hash and fails if not
+    //if seller fails he should run var txhex = await dealership.refundSeller() and broadcast the tx after 5 blocks
+    //seller runs var txhex = await dealership.useMultisigAsSeller( dealership.sellers_contract.privkey2, buyer_sig ) and broadcasts the tx immediately
+    //seller runs var seller_sig = await dealership.signContractAsSeller()
+    //seller sends seller_sig to buyer
+
+    //buyer runs var txhex = await dealership.useMultisigAsBuyer( seller_sig ) and broadcasts the tx immediately
   }
+
+  // const signMessage = async (msg: string) =>{
+  //   try {
+  //     const webln = await requestProvider()
+  //     const info = await webln.getInfo()
+
+  //     await window.nostr.enable()
+
+  //     const sellersPubKey = await window.nostr.getPublicKey()
+
+  //     console.log(sellersPubKey)
+
+  //     const resp = await webln.signMessage(msg)
+  //     const { message, signature } = resp
+  //     console.log("Signed message", message, signature)
+  //   } catch (err: any) {
+  //     alert(err.message);
+  //   }
+  // }
 
   return (
     <section className="inventory py-5" id="inventory">
@@ -65,7 +130,7 @@ const Inventory: React.FunctionComponent = () => {
                 <div className="car-info d-flex justify-content-between">
                   <div className="car-text text-uppercase">
                     <h6 className="font-weight-bold">Luxury UTXO</h6>
-                    <h6>Cost: 1.1 BTC</h6>
+                    <h6>Cost: 4,000 sats</h6>
                   </div>
                   <h5 className="car-value align-self-center py-2 px-3"
                     style={{cursor:"pointer"}}
@@ -73,13 +138,13 @@ const Inventory: React.FunctionComponent = () => {
                       setCartItem({
                         id: 0,
                         name: "Luxury UTXO",
-                        price: 1.1,
-                        item: "1.0 BTC",
+                        price: 4000,
+                        item: "3,000 sats",
                       })
                       setShowModalBuy(true)
                     }}>
                    <center style={{fontSize:16, marginBottom: 6}}>Buy</center>
-                    <span className="car-price">1.0 BTC</span>
+                    <span className="car-price">3,000 sats</span>
                   </h5>
                 </div>
               </div>
@@ -99,7 +164,7 @@ const Inventory: React.FunctionComponent = () => {
                 <p>
                   <span>
                     <i className="fas fa-gas-pump" />
-                    &nbsp;0.1 BTC
+                    &nbsp;1000 sats
                   </span>
                 </p>
               </div>

@@ -1,8 +1,27 @@
 "use client"
 import * as React from "react";
+import { requestProvider } from "webln";
+
+declare let window: any
+declare let dealership: any
 
 const Sell: React.FunctionComponent = () => {
   const [showModalSell, setShowModalSell] = React.useState(false);
+
+  const [sellerPubKey, setSellerPubKey] = React.useState("ENABLE ALBY");
+
+
+  const getSellerPubKey = async () =>{
+    try {
+      const privKey = dealership.getPrivateKey()
+      const pubKey = dealership.getPublicKey(privKey)
+      await dealership.prepBuyer(pubKey)
+      console.log("buyerContract", dealership.buyers_contract)
+      dealership.db.push(dealership.buyers_contract)
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }
 
   return (
     <div>
@@ -33,7 +52,10 @@ const Sell: React.FunctionComponent = () => {
                 <button
                   className="bg-orange-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
-                  onClick={() => setShowModalSell(true)}
+                  onClick={() => {
+                    setShowModalSell(true)
+                    getSellerPubKey()
+                  }}
                 >Yes Sell</button>
               </div>
             </div>
@@ -66,10 +88,10 @@ const Sell: React.FunctionComponent = () => {
                 <div className="relative p-6 flex-auto">
                   <form>
                     <div className="mb-4">
-                      <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
-                        Transaction ID
+                      <label className="block text-gray-700 text-sm font-bold mb-2">
+                        Seller Pubkey
                       </label>
-                      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" />
+                      <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" value={sellerPubKey} />
                     </div>
                   </form>
                 </div>
