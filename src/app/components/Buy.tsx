@@ -18,25 +18,6 @@ const Buy: React.FunctionComponent = () => {
   const [messages, setMessages] = React.useState([])
   const [ws, setWs] = React.useState<any>(null)
 
-  React.useEffect(()=>{
-
-    setWs(window.socket);
-
-    // Add an event listener for incoming messages
-    window.socket.onmessage = (event: any) => {
-      const messageData: any = event.data;
-      console.log("messageData", messageData)
-      setMessages(messageData);
-    };
-
-    // Cleanup: Close the WebSocket connection when the component is unmounted
-    return () => {
-      if (window.socket) {
-        window.socket.close();
-      }
-    };
-  }, [])
-
   const prepBuy = async () =>{
     try {
       const privKey = dealership.getPrivateKey()

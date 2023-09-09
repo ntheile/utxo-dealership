@@ -30,7 +30,6 @@ export default function RootLayout({
         <script src="https://bundle.run/noble-secp256k1@1.2.14"></script>
         <script src="https://bitcoincore.tech/apps/bitcoinjs-ui/lib/bitcoinjs-lib.js"></script>
         <script src="https://bundle.run/browserify-cipher@1.0.1"></script>
-        <script src="/nostr.js"></script>
         <script src="/dealership.js"></script>
       </head>
       <body className={inter.className}>
