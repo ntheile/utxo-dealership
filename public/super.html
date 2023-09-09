@@ -7,6 +7,7 @@
         <script src="https://bundle.run/browserify-cipher@1.0.1"></script>
         <script src="https://unpkg.com/@cmdcode/tapscript@1.4.0"></script>
         <script src="https://bundle.run/noble-secp256k1@1.2.14"></script>
+        <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
         <style>
             * {
                 box-sizing: border-box;
@@ -158,8 +159,13 @@
                         var sellerTxHexEl = document.createElement( "p" );
                         sellerTxHexEl.innerText = txhex;
                         var txid = await dealership.pushBTCpmt( txhex, "" );
+
                         console.log( "txid:", txid );
                         $( '.procedure' ).append( sellerTxHexEl );
+
+                        var txIdEl = document.createElement( "p" );
+                        txIdEl.innerText = `txid: ${txid}`;
+                        $( '.procedure' ).append( txIdEl );
 
                         // alert( `ok you're the seller now -- broadcast this tx, then click ok:\n\n${txhex}` );
                         var seller_sig = await dealership.signContractAsSeller();
@@ -176,7 +182,7 @@
                         // $( 'h2' ).remove();
                         // $( 'p' ).remove();
                         var hd = document.createElement( "h2" );
-                        hd.innerText = "you're done!";
+                        hd.innerText = "Congrats you sold your UTXO!";
                         $( '.procedure' ).append( hd );
                     }
                     if ( content[ "type" ] == "more_info_for_buyer" ) {
@@ -195,12 +201,21 @@
                         buyerTxHexEl.innerText = txhex;
                         $( '.procedure' ).append( buyerTxHexEl );
 
+                        var buyTxIdEl = document.createElement( "p" );
+                        buyTxIdEl.innerText = `txid: ${txid}`;
+                        $( '.procedure' ).append( buyTxIdEl );
+
                         // alert( `ok you're the buyer now -- broadcast this tx, then click ok:\n\n${txhex}` );
 
-                        // var hd = document.createElement( "h2" );
-                        // hd.innerText = "you're done!";
-                        // $( '.procedure' ).append( hd );
+                        var hd = document.createElement( "h2" );
+                        hd.innerText = "Congrats, you just bought a brand new fresh UTXO!";
+                        $( '.procedure' ).append( hd );
                         //return here for buyer
+                        confetti({
+                            particleCount: 1000,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                        });
                     }
                 }
                 if ( kind !== 63582 || $_GET[ "user" ] != "buyer" ) return;

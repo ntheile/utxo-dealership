@@ -282,12 +282,12 @@ const Buy: React.FunctionComponent = () => {
                         onClick={() => setShowModalBuy(false)}>
                         Close
                       </button>
-                      <button
+                      {/* <button
                         className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                         onClick={()=>setStep("sendSatsToSeller")}>
                         Next
-                      </button>
+                      </button> */}
                     </div>
                   </>
                 )}
@@ -353,15 +353,15 @@ const Buy: React.FunctionComponent = () => {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
     ) : null}
-    <div className="row mb-5" style={{backgroundColor:"var(--mainGray)", paddingTop: 100}}>
+    {/* <div className="row mb-5" style={{backgroundColor:"var(--mainGray)", paddingTop: 100}}>
       <div className="col d-flex flex-wrap text-uppercase justify-content-center">
         <h1 className="font-weight-bold align-self-center mx-1">our</h1>
         <h1 className="section-title--special mx-1">Orderbook</h1>
       </div>
-      {/* <div style={{marginTop:-300}}>
+      <div style={{marginTop:-300}}>
         <OrderBook/>
-      </div> */}
-    </div>
+      </div>
+    </div> */}
     </section>
   )
 }
