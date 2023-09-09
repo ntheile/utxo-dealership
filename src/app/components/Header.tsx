@@ -13,11 +13,6 @@ const Header: React.FunctionComponent = () => {
               </h1>
             </center>
           </div>
-          <div>
-            <h3 className="title-heading-dark d-inline-block p-2 text-uppercase">
-              A Market for fresh UTXOs
-            </h3>
-          </div>
         </div>
       </div>
 
@@ -31,7 +26,7 @@ const Header: React.FunctionComponent = () => {
             <h3 className="title-heading text-uppercase">From Block height 806650</h3>
             <h6 className="title-heading text-capitalise">starts from</h6>
             <h2 className="title-heading d-inline-block">
-              0.1 BTC{" "}
+              1,000 sats{" "}
               <a href="#inventory" className="title-icon d-inline-block mx-2">
                 <i className="fas fa-play" />
               </a>{" "}

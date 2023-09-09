@@ -1,5 +1,5 @@
 import * as React from "react";
-import Inventory from "./components/Inventory";
+import Buy from "./components/Buy";
 import Sell from "./components/Sell";
 import Nav from "./components/Nav"
 import Header from "./components/Header"
@@ -11,7 +11,7 @@ export default function Home() {
       <Nav/>
       <Header/>
       <Skills/>
-      <Inventory/>
+      <Buy/>
       <Sell/>
     </div>
   )

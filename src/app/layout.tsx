@@ -28,6 +28,9 @@ export default function RootLayout({
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
         <script src="https://unpkg.com/@cmdcode/tapscript@1.4.0"></script>
         <script src="https://bundle.run/noble-secp256k1@1.2.14"></script>
+        <script src="https://bitcoincore.tech/apps/bitcoinjs-ui/lib/bitcoinjs-lib.js"></script>
+        <script src="https://bundle.run/browserify-cipher@1.0.1"></script>
+        <script src="/nostr.js"></script>
         <script src="/dealership.js"></script>
       </head>
       <body className={inter.className}>

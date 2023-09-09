@@ -49,5 +49,13 @@ generatetoaddress 200 bcrt1qg2vp5enhpek5pt7p4xr3v9m2vfmplhlfa2p69j
 // To look for the vout number
 gettransaction 1085070086073b995885a9868d7d1fb2e03514e3bce6d996287dac53e1f9bc93 false true
 
-// broadcast
-https://mempool.space/testnet/tx/push
+
+## MutinyNet
+// Faucet
+https://faucet.mutinynet.com
+
+// Mempool
+https://mutinynet.com/
+
+// Broadcast
+https://mutinynet.com/tx/push

@@ -5,7 +5,7 @@ import * as React from "react";
 declare let window: any
 declare let dealership: any
 
-const Inventory: React.FunctionComponent = () => {
+const Buy: React.FunctionComponent = () => {
   const [showModalBuy, setShowModalBuy] = React.useState(false);
   const [cartItem, setCartItem] = React.useState({
     id: 0,
@@ -15,9 +15,26 @@ const Inventory: React.FunctionComponent = () => {
   });
   const [step, setStep] = React.useState<"prepBuy"| "sendSatsToSeller" | "complete">("prepBuy")
   const [sellerAddress, setSellerAddress] = React.useState("<WAITING FOR SELLER ADDRESS...>");
+  const [messages, setMessages] = React.useState([])
+  const [ws, setWs] = React.useState<any>(null)
 
   React.useEffect(()=>{
-    // dealership.buyer_address = some_bitcoin_address;
+
+    setWs(window.socket);
+
+    // Add an event listener for incoming messages
+    window.socket.onmessage = (event: any) => {
+      const messageData: any = event.data;
+      console.log("messageData", messageData)
+      setMessages(messageData);
+    };
+
+    // Cleanup: Close the WebSocket connection when the component is unmounted
+    return () => {
+      if (window.socket) {
+        window.socket.close();
+      }
+    };
   }, [])
 
   const prepBuy = async () =>{
@@ -32,7 +49,7 @@ const Inventory: React.FunctionComponent = () => {
   }
 
   const sendSatsToSeller = async () => {
-
+    // NOSTR
   }
 
   React.useEffect(()=> {
@@ -63,7 +80,7 @@ const Inventory: React.FunctionComponent = () => {
   return (
     <section className="inventory py-5" id="inventory">
       <center style={{marginBottom: 50}}>
-      <h1 className="font-weight-bold align-self-center mx-1">Market for fresh UTXOs</h1>
+
       </center>
       <div className="container">
         <div className="row mb-5">
@@ -88,11 +105,7 @@ const Inventory: React.FunctionComponent = () => {
         <div className="row">
           <div className="col-10 mx-auto my-3 col-md-6 col-lg-4">
             <div className="card car-card">
-              <img
-                className="card-img-top car-img"
-                src="/utxo1.jpg"
-                alt=""
-              />
+              <img className="card-img-top car-img" src="/utxo1.jpg" alt=""/>
               <div className="card-body">
                 <div className="car-info d-flex justify-content-between">
                   <div className="car-text text-uppercase">
@@ -148,20 +161,20 @@ const Inventory: React.FunctionComponent = () => {
                 <div className="car-info d-flex justify-content-between">
                   <div className="car-text text-uppercase">
                     <h6 className="font-weight-bold">Economy UTXO</h6>
-                    <h6>Cost: 0.11 BTC</h6>
+                    <h6>Cost: 1,150 sats</h6>
                   </div>
                   <h5 className="car-value align-self-center py-2 px-3"style={{cursor:"pointer"}}
                     onClick={()=>{
                       setCartItem({
                         id: 0,
                         name: "Economy UTXO",
-                        price: 0.11,
-                        item: "0.1 BTC",
+                        price: 1150,
+                        item: "1,000 sats",
                       })
                       setShowModalBuy(true)
                     }}>
                     <center style={{fontSize:16, marginBottom: 6}}>Buy</center>
-                    <span className="car-price">0.1 BTC</span>
+                    <span className="car-price">1,000 sats</span>
                   </h5>
                 </div>
               </div>
@@ -181,7 +194,7 @@ const Inventory: React.FunctionComponent = () => {
                 <p>
                   <span>
                     <i className="fas fa-gas-pump" />
-                    &nbsp;0.01 BTC
+                    &nbsp;150 sats
                   </span>
                 </p>
               </div>
@@ -197,8 +210,8 @@ const Inventory: React.FunctionComponent = () => {
               <div className="card-body">
                 <div className="car-info d-flex justify-content-between">
                   <div className="car-text text-uppercase">
-                    <h6 className="font-weight-bold">Mid-Size Sedan UTXO</h6>
-                    <h6>Cost: 0.225</h6>
+                    <h6 className="font-weight-bold">Mid-Size UTXO</h6>
+                    <h6>Cost: 2,500 sats</h6>
                   </div>
                   <h5 className="car-value align-self-center py-2 px-3"
                     style={{cursor:"pointer"}}
@@ -206,13 +219,13 @@ const Inventory: React.FunctionComponent = () => {
                       setCartItem({
                         id: 0,
                         name: "Mid-Size UTXO",
-                        price: 0.225,
-                        item: "0.25 BTC",
+                        price: 2500,
+                        item: "2,000 sats",
                       })
                       setShowModalBuy(true)
                     }}>
                     <center style={{fontSize:16, marginBottom: 6}}>Buy</center>
-                    <span className="car-price">0.25 BTC</span>
+                    <span className="car-price">2,000 sats</span>
                   </h5>
                 </div>
               </div>
@@ -232,7 +245,7 @@ const Inventory: React.FunctionComponent = () => {
                 <p>
                   <span>
                     <i className="fas fa-gas-pump" />
-                    &nbsp;0.025 BTC
+                    &nbsp;500 sats
                   </span>
                 </p>
               </div>
@@ -265,19 +278,21 @@ const Inventory: React.FunctionComponent = () => {
                 {step ==="prepBuy" && (
                   <>
                     <div className="relative p-6 flex-auto">
-                      <form>
+                      {/* <form>
                         <div className="mb-4">
-                          <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
+                          <label className="block text-gray-700 text-sm font-bold mb-2">
                             Total Cost:
                           </label>
+                          {JSON.stringify(messages, null, 2 )}
                           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder={cartItem.price + " sats"} disabled />
                         </div>
                         <div className="mb-4">
-                          <label className="block text-gray-700 text-sm mb-2" for="username">
+                          <label className="block text-gray-700 text-sm mb-2">
                             You get a brand new UTXO worth {cartItem.item}!
                           </label>
                         </div>
-                      </form>
+                      </form> */}
+                      <iframe src="/super.html?user=buyer" width={500} height={500} />
                     </div>
                     <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                       <button
@@ -370,6 +385,6 @@ const Inventory: React.FunctionComponent = () => {
   )
 }
 
-export default Inventory;
+export default Buy;
 
 

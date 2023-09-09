@@ -10,12 +10,14 @@ const Sell: React.FunctionComponent = () => {
 
   const [sellerPubKey, setSellerPubKey] = React.useState("");
   const [step, setStep] = React.useState<"sell"| "setFee" | "pending" | "complete">("sell")
+  const [pubKey, setPubKey] = React.useState("")
 
   const sell = async () =>{
     try {
-      const privKey = dealership.getPrivateKey()
-      const pubKey = dealership.getPublicKey(privKey)
-      await dealership.prepBuyer(pubKey)
+      const sellers_privkey = dealership.getPrivateKey()
+      sessionStorage[ "sellers_privkey" ] = sellers_privkey
+      const sellers_pubkey = dealership.getPublicKey( sellers_privkey )
+      window.setNostrNote( sellers_pubkey, null, window.relay )
       setStep("setFee")
     } catch (err: any) {
       alert(err.message);
@@ -94,30 +96,31 @@ const Sell: React.FunctionComponent = () => {
 
                     <div className="mb-4">
                     {step === "sell" && (
-                       <fieldset>
-                       <legend>How much do you want to sell?</legend>
+                      <iframe src="/super.html" width={500} height={500} />
+                    //    <fieldset>
+                    //    <legend>How much do you want to sell?</legend>
 
-                       <div>
-                         <input type="radio" id="huey" name="drone" value="huey" checked />
-                         <label>&nbsp;1,000 sats</label>
-                       </div>
+                    //    <div>
+                    //      <input type="radio" id="huey" name="drone" value="huey" checked />
+                    //      <label>&nbsp;1,000 sats</label>
+                    //    </div>
 
-                       <div>
-                         <input type="radio" id="dewey" name="drone" value="dewey" />
-                         <label>&nbsp;2,000 sats</label>
-                       </div>
+                    //    <div>
+                    //      <input type="radio" id="dewey" name="drone" value="dewey" />
+                    //      <label>&nbsp;2,000 sats</label>
+                    //    </div>
 
-                       <div>
-                         <input type="radio" id="louie" name="drone" value="louie" />
-                         <label>&nbsp;3,000 sats</label>
-                       </div>
-                       <button
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      onClick={sell}>
-                      Sell
-                    </button>
-                     </fieldset>
+                    //    <div>
+                    //      <input type="radio" id="louie" name="drone" value="louie" />
+                    //      <label>&nbsp;3,000 sats</label>
+                    //    </div>
+                    //    <button
+                    //     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    //     type="button"
+                    //     onClick={sell}>
+                    //       Next
+                    //     </button>
+                    //  </fieldset>
                     )}
 
                     {step === "setFee" && (
@@ -148,7 +151,12 @@ const Sell: React.FunctionComponent = () => {
                     )}
 
                     {step === "pending" && (
-                        <h3>Hold tight we need to wait for a buyer, waiting for an address to receive money...</h3>
+                      <>
+                        <h3>waiting for someone to take your offer...</h3>
+                        <p>
+                          Your (seller) pubkey: {pubKey}
+                        </p>
+                      </>
                     )}
 
                     {step === "complete" && (
